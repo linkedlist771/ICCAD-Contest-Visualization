@@ -1,5 +1,4 @@
 import os
-import argparse
 from tqdm import tqdm
 
 def parse_nodes_file(nodes_file):
@@ -108,7 +107,7 @@ def draw_rectangles(args):
 
     return rectangles
 
-def visualize_router_data(nodes_data, pl_data):
+def visualize_router_data(nodes_data, pl_data, save_figure=False):
     # Convert nodes_data into a dictionary for quick lookup
     nodes_dict = {node['name']: node for node in nodes_data['nodes']}
 
@@ -123,7 +122,7 @@ def visualize_router_data(nodes_data, pl_data):
         results = list(tqdm(pool.imap(draw_rectangles, chunks), total=len(chunks), desc="Drawing rectangles"))
     
     # Create a new figure and axis
-    fig, ax = plt.subplots(figsize=(10, 10))
+    fig, ax = plt.subplots(figsize=(20, 20))
     
     # Add the computed rectangles to the plot
     for rect_chunk in results:
@@ -137,6 +136,8 @@ def visualize_router_data(nodes_data, pl_data):
     # Adjust the aspect ratio to equal and set the plot limits
     ax.set_aspect('equal', 'box')
     ax.autoscale_view()
+    if save_figure:
+        fig.savefig('router_data_visualization.png', dpi=300)
     
     plt.show()
 
